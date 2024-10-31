@@ -29,12 +29,10 @@ public class Libro {
 
     @ManyToOne
     @JoinColumn(name = "autor")
-    @Column(name = "autor")
     private Autor autor;
 
     @ManyToOne
     @JoinColumn(name = "editorial")
-    @Column(name = "editorial")
     private Editorial editorial;
 
     public Libro() {
