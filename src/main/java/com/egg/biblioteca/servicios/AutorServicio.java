@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.egg.biblioteca.entidades.Autor;
+import com.egg.biblioteca.excepciones.MiException;
 import com.egg.biblioteca.repositorios.AutorRepositorio;
 
 @Service
@@ -18,8 +19,8 @@ public class AutorServicio {
     private AutorRepositorio autorRepositorio;
 
     @Transactional
-    public void crearAutor(String nombre) {
-
+    public void crearAutor(String nombre) throws MiException{
+        validar(nombre);
         Autor autor = new Autor();// Instancio un objeto del tipo Autor
         autor.setNombre(nombre);// Seteo el atributo, con el valor recibido como parámetro
 
@@ -37,13 +38,20 @@ public class AutorServicio {
     }
 
     @Transactional
-    public void modificarAutor(String nombre, String id){     
+    public void modificarAutor(String nombre, String id) throws MiException {
+        validar(nombre);
         Optional<Autor> respuesta = autorRepositorio.findById(id);
         if (respuesta.isPresent()) {
             Autor autor = respuesta.get();
-           
+
             autor.setNombre(nombre);
             autorRepositorio.save(autor);
+        }
+    }
+
+    private void validar(String nombre) throws MiException {
+        if (nombre.isEmpty() || nombre == null) {
+            throw new MiException("El nombre no puede ser nulo o estar vacio");
         }
     }
 
